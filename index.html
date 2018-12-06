@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+	<title>Waifu Tech</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div class="page-scroller">
+	<div class="list-wrapper">
+		<ul class="list">
+			<li>
+				<a target="_blank" href="https://waifuchain.moe">
+					<h3>WaifuChain</h3>
+				</a>
+				<p>Tradeable waifu cryptocollectibles backed by the Ethereum blockchain</p>
+			</li>
+			<li>
+				<a target="_blank" href="https://waifu.wiki">
+					<h3>Waifu Wiki</h3>
+				</a>
+				<p>Collaborative wiki centered on aggregating and curating waifu data</p>
+			</li>
+			<li>
+				<a target="_blank" href="https://github.com/thewaifuproject/waifubot">
+					<h3>WaifuBot</h3>
+				</a>
+				<p>Open source discord bot developed incrementally</p>
+			</li>
+			<li>
+				<a target="_blank" href="https://www.kaggle.com/corollari/waifus">
+					<h3>Waifu Dataset</h3>
+				</a>
+				<p>An open dataset containing info and pictures of over 15.000 waifus</p>
+			</li>
+			<li>
+				<a target="_blank" href="https://github.com/thewaifuproject/waifuchat">
+					<h3>Waifu AI chatbot</h3>
+				</a>
+				<p>AI-based chatbot trained on specific waifus' speech</p>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="page-wrapper">
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/iScroll/5.1.1/iscroll-probe.min.js"></script>
+	<script>
+		window.onload = function() {
+
+	var wrapper = document.querySelector( '.page-wrapper' );
+
+	var originalList = document.querySelector( '.list-wrapper' );
+	var originalListItems = originalList.innerHTML;
+	originalList.parentNode.removeChild( originalList );
+
+	// Top list
+	var listA = document.createElement( 'ul' );
+	listA.className = 'list-wrapper list-a';
+	listA.innerHTML = originalListItems;
+	wrapper.appendChild( listA );
+
+	// Monocle list
+	var listB = document.createElement( 'ul' );
+	listB.className = 'list-wrapper list-b';
+	listB.innerHTML = originalListItems;
+	wrapper.appendChild( listB );
+
+	// Bottom list
+	var listC = document.createElement( 'ul' );
+	listC.className = 'list-wrapper list-c';
+	listC.innerHTML = originalListItems;
+	wrapper.appendChild( listC );
+
+	var listAInner = listA.querySelector( '.list' ),
+		listCInner = listC.querySelector( '.list' ),
+		listBInner = listB.querySelector( '.list' );
+
+	var scroller,
+		scrollPosition = 0;
+
+	var rowHeight = listA.querySelector( 'li' ).offsetHeight;
+
+	var listAHeight = 0,
+		listBHeight = rowHeight * 2,
+		listCHeight = 0;
+
+	var listAScrollheight = listAInner.scrollHeight,
+		listBScrollheight = listBInner.scrollHeight;
+
+	function init() {
+
+		window.addEventListener( 'resize', layout );
+
+		scroller = new IScroll( document.body, {
+			mouseWheel: true,
+			scrollbars: true,
+			probeType: 3
+		} );
+
+		scroller.on( 'scroll', onScrollUpdate );
+
+		layout();
+
+	}
+
+	function layout() {
+
+		var height = window.innerHeight;
+
+		listAHeight = ( height - listBHeight ) / 2;
+		listAHeight = Math.floor( listAHeight / rowHeight ) * rowHeight;
+
+		listCHeight = height - ( listAHeight + listBHeight );
+
+		listA.style.height = listAHeight + 'px';
+		listB.style.height = listBHeight + 'px';
+		listB.style.top = listAHeight + 'px';
+		listC.style.height = listCHeight + 'px';
+
+		sync();
+
+	}
+
+	function sync() {
+
+		listAInner.style.top = ( listAHeight + ( -scrollPosition * ( listAScrollheight ) ) ) + 'px';
+		listBInner.style.top = ( -scrollPosition * ( listBScrollheight - listBHeight ) ) + 'px';
+		listCInner.style.top = ( -scrollPosition * listAScrollheight ) + 'px';
+
+	}
+
+	function onScrollUpdate( event ) {
+
+		scrollPosition = scroller.y / scroller.maxScrollY;
+		scrollPosition = Math.max( 0, Math.min( 1, scrollPosition ) );
+
+		sync();
+
+	}
+
+	init();
+
+};
+	</script>
+</body>
+</html>
